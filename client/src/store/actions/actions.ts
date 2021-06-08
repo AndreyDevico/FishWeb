@@ -9,6 +9,7 @@ import {
   CORRECTNUMBER,
   REFRESH,
   END,
+  SETORDERID
 } from './actionsTypes'
 import axios from 'axios'
 import { Dispatch } from 'react'
@@ -105,7 +106,9 @@ export const createOrder = (userInfo: OrderInitialValue) => {
   return async (dispatch: dispatchType, getState: () => AppState) => {
     const cart = getState().mainReducer.cart
     const totalPrice = getState().mainReducer.totalPrice
-    await axios.post('http://localhost:5000/api/order', { userInfo, cart, totalPrice })
+    const res = await axios.post('http://localhost:5000/api/order', { userInfo, cart, totalPrice })
+    console.log("🚀 ~ file: actions.ts ~ line 109 ~ return ~ res", res)
+    dispatch(setOrderId(res.data.orderID))
   }
 }
 
@@ -235,6 +238,18 @@ export const deleteFullItem = (cart: Array<product>, totalPrice: number, product
   }
 }
 
+type setOrderIdType = {
+  type: typeof SETORDERID,
+  orderId: string
+}
+
+export const setOrderId = (orderId: string): setOrderIdType => {
+  return {
+    type: SETORDERID,
+    orderId
+  }
+}
+
 export type ActionsTypes =
   setProductsType |
   searchType |
@@ -245,4 +260,5 @@ export type ActionsTypes =
   setCorrectNumberType |
   setIsEndType |
   refreshType |
-  deleteFullItemType
+  deleteFullItemType | 
+  setOrderIdType

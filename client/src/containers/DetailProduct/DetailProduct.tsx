@@ -175,7 +175,6 @@ const DetailProduct: React.FC = () => {
         onCancel={handleCancel}
         cancelText="Продолжить"
         okText="Заказать"
-        {...isFooter}
       >
         <Cart
           cart={cart}

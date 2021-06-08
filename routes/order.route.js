@@ -4,6 +4,8 @@ const nodemailer = require('nodemailer')
 const message = require('../email/message')
 const contact = require('../email/contact')
 const Order = require('../models/Order')
+const pdfTemplate = require('../documents');
+const pdf = require('html-pdf')
 
 require('dotenv').config()
 
@@ -35,6 +37,8 @@ router.post('/order', async (req, res) => {
       res.json({ message: 'sent' })
     }
   })
+
+  res.send({orderID: order._id})
 })
 
 router.post('/contact-us', async(req, res) => {
@@ -48,6 +52,32 @@ router.post('/contact-us', async(req, res) => {
       res.json({ message: 'sent' })
     }
   })
+})
+
+router.post('/create-pdf', async(req, res) => {
+  const {body: { orderId }} = req
+  console.log("🚀 ~ file: order.route.js ~ line 78 ~ router.post ~ req.body", req.body)
+  console.log("🚀 ~ file: order.route.js ~ line 59 ~ router.post ~ orderId", orderId)
+
+  const order = await Order.findById(orderId)
+  console.log("🚀 ~ file: order.route.js ~ line 61 ~ router.post ~ order", order)
+
+  const totalPrice = order.products.reduce((acc, item) => {
+    return acc = Number(acc) + Number(item.price * item.selectedSize.length)
+  }, 0)
+  console.log("🚀 ~ file: order.route.js ~ line 66 ~ totalPrice ~ totalPrice", totalPrice)
+
+  pdf.create(pdfTemplate({order, totalPrice}), {}).toFile(`${__dirname}/result.pdf`, (err) => {
+    if(err) {
+        res.send(Promise.reject());
+    }
+
+    res.send(Promise.resolve());
+  });
+})
+
+router.get('/fetch-pdf', (req, res) => {
+  res.sendFile(`${__dirname}/result.pdf`)
 })
 
 module.exports = router

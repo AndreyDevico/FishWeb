@@ -8,7 +8,8 @@ import {
   DELETEFULLITEM,
   REFRESH,
   END,
-  CORRECTNUMBER
+  CORRECTNUMBER,
+  SETORDERID
 }
   from "../actions/actionsTypes";
 import { ActionsTypes } from "../actions/actions";
@@ -24,6 +25,7 @@ interface IMain {
   totalPrice: number
   isCorrectPhone: boolean
   isEnd: boolean
+  orderId: string
 }
 
 const initialState = {
@@ -33,11 +35,14 @@ const initialState = {
   filterProducts: [],
   totalPrice: 0,
   isCorrectPhone: false,
-  isEnd: false
+  isEnd: false,
+  orderId: ''
 }
 
 export default function mainReducer(state: IMain = initialState, action: ActionsTypes) {
   switch (action.type) {
+    case SETORDERID:
+      return { ...state, orderId: action.orderId }
     case SETPRODUCTS:
       return { ...state, products: [...action.products] }
     case SEARCH:

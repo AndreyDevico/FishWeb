@@ -7,6 +7,8 @@ import Products from "./containers/Products/Products";
 import { Layout } from "antd";
 import OrderPage from "./containers/OrderPage";
 import ContactUs from "./containers/ContactUs";
+import OrderSuccessPage from "./containers/OrderSuccessPage";
+
 const { Content } = Layout;
 
 function App() {
@@ -26,6 +28,7 @@ function App() {
             />
             <Route exact path="/products" component={Products} />
             <Route exact path="/order" component={OrderPage} />
+            <Route exact path="/order-success" component={OrderSuccessPage} />
           </Switch>
         </Content>
       </Layout>

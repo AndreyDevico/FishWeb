@@ -8,17 +8,20 @@ import { OrderInitialValue } from "./types";
 import styles from "./styles.module.scss";
 import { createOrder } from "../../store/actions/actions";
 import Summary from "../../components/Summary";
+import { useHistory } from "react-router-dom";
 
 const OrderPage = () => {
   const dispatch = useDispatch();
+  const history = useHistory();
 
-  const onSubmit = (value: OrderInitialValue) => {
+  const onSubmit = async(value: OrderInitialValue) => {
     console.log("🚀 ~ file: index.tsx ~ line 15 ~ onSubmit ~ value", value);
     if (!value) {
       return;
     }
 
-    dispatch(createOrder(value));
+    await dispatch(createOrder(value));
+    history.push('/order-success')
   };
   return (
     <div className={styles.root}>
